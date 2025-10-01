@@ -9,6 +9,7 @@ import { TratamientosMedicos } from "./components/TratamientosMedicos";
 import { NotasMedicas } from "./components/NotasMedicas";
 import { NotasEnfermeria } from "./components/NotasEnfermeria";
 import { EpicrisisMedica } from "./components/EpicrisisMedica";
+import { Laboratorios } from "./components/Laboratorios";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
 import { User, Menu } from "lucide-react";
 import { Button } from "./components/ui/button";
@@ -184,6 +185,7 @@ export default function App() {
           {currentView === "ordenes-medicas" && <OrdenesMedicas />}
           {currentView === "antecedentes" && <AntecedentesMedicos />}
           {currentView === "estudios" && <EstudiosMedicos />}
+          {currentView === "laboratorios" && <Laboratorios />}
           {currentView === "cirugias" && <CirugiasMedicas />}
           {currentView === "tratamientos" && <TratamientosMedicos />}
           {currentView === "notas-medicas" && <NotasMedicas />}
@@ -218,6 +220,7 @@ function NavigationMenu({
       title: "Diagnóstico",
       items: [
         { name: "Estudios", view: "estudios", badge: "5" },
+        { name: "Laboratorios", view: "laboratorios", badge: "8" },
         { name: "Historial Médico", view: "medical-record", badge: null },
       ],
     },
