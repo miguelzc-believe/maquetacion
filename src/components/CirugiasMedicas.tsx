@@ -64,6 +64,44 @@ export function CirugiasMedicas() {
     }
   };
 
+  // Estados para funcionalidades
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingCirugia, setEditingCirugia] = useState<any>(null);
+
+  // Función para programar nueva cirugía
+  const handleProgramarCirugia = () => {
+    setEditingCirugia(null);
+    setIsModalOpen(true);
+  };
+
+  // Función para ver protocolos
+  const handleVerProtocolos = () => {
+    alert("Abriendo protocolos quirúrgicos...");
+  };
+
+  // Función para editar cirugía
+  const handleEditarCirugia = (cirugia: any) => {
+    setEditingCirugia(cirugia);
+    setIsModalOpen(true);
+  };
+
+  // Función para eliminar cirugía
+  const handleEliminarCirugia = (id: number) => {
+    if (confirm("¿Está seguro de eliminar esta cirugía?")) {
+      console.log(`Eliminar cirugía ${id}`);
+    }
+  };
+
+  // Función para ver detalles de cirugía programada
+  const handleVerDetalles = (cirugia: any) => {
+    alert(`Ver detalles de cirugía: ${cirugia.procedimiento}`);
+  };
+
+  // Función para confirmar cirugía
+  const handleConfirmarCirugia = (id: number) => {
+    alert(`Cirugía ${id} confirmada`);
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -77,11 +115,11 @@ export function CirugiasMedicas() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button>
+          <Button onClick={handleProgramarCirugia}>
             <Plus className="h-4 w-4 mr-2" />
             Programar Cirugía
           </Button>
-          <Button variant="outline">
+          <Button variant="outline" onClick={handleVerProtocolos}>
             <FileText className="h-4 w-4 mr-2" />
             Ver Protocolos
           </Button>
@@ -212,13 +250,25 @@ export function CirugiasMedicas() {
                   <TableCell>{cirugia.complicaciones}</TableCell>
                   <TableCell>
                     <div className="flex gap-1">
-                      <Button variant="ghost" size="icon">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleEditarCirugia(cirugia)}
+                      >
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleEliminarCirugia(cirugia.id)}
+                      >
                         <FileText className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleEliminarCirugia(cirugia.id)}
+                      >
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
@@ -260,10 +310,19 @@ export function CirugiasMedicas() {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleVerDetalles(cirugia)}
+                    >
                       Ver Detalles
                     </Button>
-                    <Button size="sm">Confirmar</Button>
+                    <Button
+                      size="sm"
+                      onClick={() => handleConfirmarCirugia(cirugia.id)}
+                    >
+                      Confirmar
+                    </Button>
                   </div>
                 </div>
               ))}

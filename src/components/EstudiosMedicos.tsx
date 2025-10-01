@@ -74,6 +74,34 @@ export function EstudiosMedicos() {
     ],
   });
 
+  // Estados para funcionalidades
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingEstudio, setEditingEstudio] = useState<any>(null);
+
+  // Función para solicitar nuevo estudio
+  const handleSolicitarEstudio = () => {
+    setEditingEstudio(null);
+    setIsModalOpen(true);
+  };
+
+  // Función para ver detalles del estudio
+  const handleVerEstudio = (estudio: any) => {
+    alert(`Ver detalles del estudio: ${estudio.nombre}`);
+  };
+
+  // Función para descargar resultados
+  const handleDescargarResultados = () => {
+    alert("Descargando resultados de estudios...");
+  };
+
+  // Función para eliminar estudio
+  const handleEliminarEstudio = (id: number, tipo: string) => {
+    if (confirm("¿Está seguro de eliminar este estudio?")) {
+      // Aquí iría la lógica para eliminar el estudio
+      console.log(`Eliminar estudio ${id} de tipo ${tipo}`);
+    }
+  };
+
   const getEstadoColor = (estado: string) => {
     switch (estado) {
       case "completado":
@@ -113,11 +141,11 @@ export function EstudiosMedicos() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button>
+          <Button onClick={handleSolicitarEstudio}>
             <Plus className="h-4 w-4 mr-2" />
             Solicitar Estudio
           </Button>
-          <Button variant="outline">
+          <Button variant="outline" onClick={handleDescargarResultados}>
             <Download className="h-4 w-4 mr-2" />
             Descargar Resultados
           </Button>
@@ -216,7 +244,7 @@ export function EstudiosMedicos() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Análisis de Laboratorio</CardTitle>
-              <Button size="sm">
+              <Button size="sm" onClick={handleSolicitarEstudio}>
                 <Plus className="h-4 w-4 mr-1" />
                 Solicitar Análisis
               </Button>
@@ -255,10 +283,20 @@ export function EstudiosMedicos() {
                       <TableCell>{estudio.medico}</TableCell>
                       <TableCell>
                         <div className="flex gap-1">
-                          <Button variant="ghost" size="icon">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleVerEstudio(estudio)}
+                          >
                             <Eye className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="icon">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() =>
+                              handleEliminarEstudio(estudio.id, "laboratorio")
+                            }
+                          >
                             <Download className="h-4 w-4" />
                           </Button>
                         </div>
@@ -276,7 +314,7 @@ export function EstudiosMedicos() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Estudios de Imagen</CardTitle>
-              <Button size="sm">
+              <Button size="sm" onClick={handleSolicitarEstudio}>
                 <Plus className="h-4 w-4 mr-1" />
                 Solicitar Imagen
               </Button>
@@ -315,10 +353,20 @@ export function EstudiosMedicos() {
                       <TableCell>{estudio.medico}</TableCell>
                       <TableCell>
                         <div className="flex gap-1">
-                          <Button variant="ghost" size="icon">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleVerEstudio(estudio)}
+                          >
                             <Eye className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="icon">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() =>
+                              handleEliminarEstudio(estudio.id, "imagen")
+                            }
+                          >
                             <Download className="h-4 w-4" />
                           </Button>
                         </div>
@@ -336,7 +384,7 @@ export function EstudiosMedicos() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Otros Estudios Diagnósticos</CardTitle>
-              <Button size="sm">
+              <Button size="sm" onClick={handleSolicitarEstudio}>
                 <Plus className="h-4 w-4 mr-1" />
                 Solicitar Estudio
               </Button>
@@ -375,10 +423,20 @@ export function EstudiosMedicos() {
                       <TableCell>{estudio.medico}</TableCell>
                       <TableCell>
                         <div className="flex gap-1">
-                          <Button variant="ghost" size="icon">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleVerEstudio(estudio)}
+                          >
                             <Eye className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="icon">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() =>
+                              handleEliminarEstudio(estudio.id, "otros")
+                            }
+                          >
                             <Download className="h-4 w-4" />
                           </Button>
                         </div>

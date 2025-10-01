@@ -83,6 +83,29 @@ export function TratamientosMedicos() {
     }
   };
 
+  // Estados para funcionalidades
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingTratamiento, setEditingTratamiento] = useState<any>(null);
+
+  // Función para agregar nuevo tratamiento
+  const handleNuevoTratamiento = () => {
+    setEditingTratamiento(null);
+    setIsModalOpen(true);
+  };
+
+  // Función para editar tratamiento
+  const handleEditarTratamiento = (tratamiento: any) => {
+    setEditingTratamiento(tratamiento);
+    setIsModalOpen(true);
+  };
+
+  // Función para eliminar tratamiento
+  const handleEliminarTratamiento = (id: number, tipo: string) => {
+    if (confirm("¿Está seguro de eliminar este tratamiento?")) {
+      console.log(`Eliminar tratamiento ${id} de tipo ${tipo}`);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -96,7 +119,7 @@ export function TratamientosMedicos() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button>
+          <Button onClick={handleNuevoTratamiento}>
             <Plus className="h-4 w-4 mr-2" />
             Nuevo Tratamiento
           </Button>

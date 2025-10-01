@@ -18,7 +18,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { Plus, Pencil, Trash2, Clock, User, FileText } from "lucide-react";
+import {
+  Plus,
+  Pencil,
+  Trash2,
+  Clock,
+  User,
+  FileText,
+  Search,
+  Filter,
+} from "lucide-react";
 import { useState } from "react";
 
 export function OrdenesMedicas() {
@@ -46,6 +55,65 @@ export function OrdenesMedicas() {
       medico: "Dr. López",
     },
   ]);
+
+  // Estados para funcionalidades
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingOrden, setEditingOrden] = useState<any>(null);
+  const [filtros, setFiltros] = useState({
+    tipo: "",
+    estado: "",
+    prioridad: "",
+    search: "",
+  });
+  const [ordenesFiltradas, setOrdenesFiltradas] = useState(ordenes);
+
+  // Función para agregar nueva orden
+  const handleAgregarOrden = () => {
+    setEditingOrden(null);
+    setIsModalOpen(true);
+  };
+
+  // Función para editar orden
+  const handleEditarOrden = (orden: any) => {
+    setEditingOrden(orden);
+    setIsModalOpen(true);
+  };
+
+  // Función para eliminar orden
+  const handleEliminarOrden = (id: number) => {
+    if (confirm("¿Está seguro de eliminar esta orden médica?")) {
+      setOrdenes(ordenes.filter((o) => o.id !== id));
+    }
+  };
+
+  // Función para filtrar órdenes
+  const handleFiltrar = () => {
+    let filtradas = ordenes;
+
+    if (filtros.tipo) {
+      filtradas = filtradas.filter((o) => o.tipo === filtros.tipo);
+    }
+    if (filtros.estado) {
+      filtradas = filtradas.filter((o) => o.estado === filtros.estado);
+    }
+    if (filtros.prioridad) {
+      filtradas = filtradas.filter((o) => o.prioridad === filtros.prioridad);
+    }
+    if (filtros.search) {
+      filtradas = filtradas.filter(
+        (o) =>
+          o.descripcion.toLowerCase().includes(filtros.search.toLowerCase()) ||
+          o.medico.toLowerCase().includes(filtros.search.toLowerCase())
+      );
+    }
+
+    setOrdenesFiltradas(filtradas);
+  };
+
+  // Función para imprimir órdenes
+  const handleImprimirOrdenes = () => {
+    window.print();
+  };
 
   const getEstadoColor = (estado: string) => {
     switch (estado) {
@@ -86,11 +154,11 @@ export function OrdenesMedicas() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button>
+          <Button onClick={handleAgregarOrden}>
             <Plus className="h-4 w-4 mr-2" />
             Nueva Orden
           </Button>
-          <Button variant="outline">
+          <Button variant="outline" onClick={handleImprimirOrdenes}>
             <FileText className="h-4 w-4 mr-2" />
             Imprimir Órdenes
           </Button>
@@ -108,7 +176,7 @@ export function OrdenesMedicas() {
               <div>
                 <p className="text-sm text-muted-foreground">Activas</p>
                 <p className="text-2xl font-bold text-primary">
-                  {ordenes.filter((o) => o.estado === "activa").length}
+                  {ordenesFiltradas.filter((o) => o.estado === "activa").length}
                 </p>
               </div>
             </div>
@@ -124,7 +192,10 @@ export function OrdenesMedicas() {
               <div>
                 <p className="text-sm text-muted-foreground">Completadas</p>
                 <p className="text-2xl font-bold text-success">
-                  {ordenes.filter((o) => o.estado === "completada").length}
+                  {
+                    ordenesFiltradas.filter((o) => o.estado === "completada")
+                      .length
+                  }
                 </p>
               </div>
             </div>
@@ -140,7 +211,10 @@ export function OrdenesMedicas() {
               <div>
                 <p className="text-sm text-muted-foreground">Pendientes</p>
                 <p className="text-2xl font-bold text-warning">
-                  {ordenes.filter((o) => o.estado === "pendiente").length}
+                  {
+                    ordenesFiltradas.filter((o) => o.estado === "pendiente")
+                      .length
+                  }
                 </p>
               </div>
             </div>
@@ -156,7 +230,7 @@ export function OrdenesMedicas() {
               <div>
                 <p className="text-sm text-muted-foreground">Total</p>
                 <p className="text-2xl font-bold text-secondary">
-                  {ordenes.length}
+                  {ordenesFiltradas.length}
                 </p>
               </div>
             </div>
@@ -213,7 +287,10 @@ export function OrdenesMedicas() {
               </Select>
             </div>
             <div className="flex items-end">
-              <Button className="w-full">Filtrar</Button>
+              <Button className="w-full" onClick={handleFiltrar}>
+                <Filter className="h-4 w-4 mr-2" />
+                Filtrar
+              </Button>
             </div>
           </div>
         </CardContent>
@@ -239,7 +316,7 @@ export function OrdenesMedicas() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {ordenes.map((orden) => (
+              {ordenesFiltradas.map((orden) => (
                 <TableRow key={orden.id}>
                   <TableCell className="font-medium">{orden.tipo}</TableCell>
                   <TableCell>{orden.descripcion}</TableCell>
@@ -258,10 +335,20 @@ export function OrdenesMedicas() {
                   <TableCell>{orden.fecha}</TableCell>
                   <TableCell>
                     <div className="flex gap-1">
-                      <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() => handleEditarOrden(orden)}
+                      >
                         <Pencil className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() => handleEliminarOrden(orden.id)}
+                      >
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>

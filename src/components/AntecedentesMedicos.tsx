@@ -65,6 +65,31 @@ export function AntecedentesMedicos() {
     ],
   });
 
+  // Estados para funcionalidades
+  const [activeTab, setActiveTab] = useState("personales");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<any>(null);
+
+  // Función para agregar nuevo antecedente
+  const handleAgregarAntecedente = () => {
+    setEditingItem(null);
+    setIsModalOpen(true);
+  };
+
+  // Función para editar antecedente
+  const handleEditarAntecedente = (item: any) => {
+    setEditingItem(item);
+    setIsModalOpen(true);
+  };
+
+  // Función para eliminar antecedente
+  const handleEliminarAntecedente = (id: number, tipo: string) => {
+    if (confirm("¿Está seguro de eliminar este antecedente?")) {
+      // Aquí iría la lógica para eliminar el antecedente
+      console.log(`Eliminar antecedente ${id} de tipo ${tipo}`);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -78,7 +103,7 @@ export function AntecedentesMedicos() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button>
+          <Button onClick={handleAgregarAntecedente}>
             <Plus className="h-4 w-4 mr-2" />
             Agregar Antecedente
           </Button>
@@ -153,7 +178,7 @@ export function AntecedentesMedicos() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Antecedentes Personales</CardTitle>
-              <Button size="sm">
+              <Button size="sm" onClick={handleAgregarAntecedente}>
                 <Plus className="h-4 w-4 mr-1" />
                 Agregar
               </Button>
@@ -206,10 +231,23 @@ export function AntecedentesMedicos() {
                       </div>
                     </div>
                     <div className="flex gap-1">
-                      <Button variant="ghost" size="icon">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleEditarAntecedente(antecedente)}
+                      >
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() =>
+                          handleEliminarAntecedente(
+                            antecedente.id,
+                            "personales"
+                          )
+                        }
+                      >
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
@@ -225,7 +263,7 @@ export function AntecedentesMedicos() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Antecedentes Familiares</CardTitle>
-              <Button size="sm">
+              <Button size="sm" onClick={handleAgregarAntecedente}>
                 <Plus className="h-4 w-4 mr-1" />
                 Agregar
               </Button>
@@ -261,10 +299,20 @@ export function AntecedentesMedicos() {
                       </div>
                     </div>
                     <div className="flex gap-1">
-                      <Button variant="ghost" size="icon">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleEditarAntecedente(familiar)}
+                      >
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() =>
+                          handleEliminarAntecedente(familiar.id, "familiares")
+                        }
+                      >
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
@@ -280,7 +328,7 @@ export function AntecedentesMedicos() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Alergias e Intolerancias</CardTitle>
-              <Button size="sm">
+              <Button size="sm" onClick={handleAgregarAntecedente}>
                 <Plus className="h-4 w-4 mr-1" />
                 Agregar
               </Button>
@@ -312,10 +360,20 @@ export function AntecedentesMedicos() {
                       </p>
                     </div>
                     <div className="flex gap-1">
-                      <Button variant="ghost" size="icon">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleEditarAntecedente(alergia)}
+                      >
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() =>
+                          handleEliminarAntecedente(alergia.id, "alergias")
+                        }
+                      >
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
