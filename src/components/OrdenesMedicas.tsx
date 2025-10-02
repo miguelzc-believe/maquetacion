@@ -56,6 +56,92 @@ export function OrdenesMedicas() {
     },
   ]);
 
+  // Datos de protocolos médicos preconfigurados
+  const protocolos = [
+    {
+      id: 1,
+      nombre: "Protocolo de Hipertensión Arterial",
+      categoria: "Cardiología",
+      descripcion:
+        "Control de presión arterial con enalapril 10mg cada 12 horas",
+      tipo: "Medicamento",
+      frecuencia: "Cada 12 horas",
+      duracion: "30 días",
+      prioridad: "alta",
+    },
+    {
+      id: 2,
+      nombre: "Protocolo de Diabetes Mellitus",
+      categoria: "Endocrinología",
+      descripcion: "Metformina 500mg con desayuno y cena",
+      tipo: "Medicamento",
+      frecuencia: "Cada 12 horas",
+      duracion: "90 días",
+      prioridad: "alta",
+    },
+    {
+      id: 3,
+      nombre: "Protocolo de Infección Respiratoria",
+      categoria: "Neumología",
+      descripcion: "Amoxicilina 500mg cada 8 horas por 7 días",
+      tipo: "Medicamento",
+      frecuencia: "Cada 8 horas",
+      duracion: "7 días",
+      prioridad: "alta",
+    },
+    {
+      id: 4,
+      nombre: "Protocolo de Dolor Abdominal",
+      categoria: "Gastroenterología",
+      descripcion: "Paracetamol 500mg cada 6 horas según necesidad",
+      tipo: "Medicamento",
+      frecuencia: "Cada 6 horas",
+      duracion: "3 días",
+      prioridad: "media",
+    },
+    {
+      id: 5,
+      nombre: "Hemograma Completo",
+      categoria: "Laboratorio",
+      descripcion: "Análisis de sangre completo con fórmula y recuento",
+      tipo: "Laboratorio",
+      frecuencia: "Una vez",
+      duracion: "Inmediato",
+      prioridad: "media",
+    },
+    {
+      id: 6,
+      nombre: "Radiografía de Tórax",
+      categoria: "Imagenología",
+      descripcion: "Estudio radiológico de tórax PA y lateral",
+      tipo: "Imagen",
+      frecuencia: "Una vez",
+      duracion: "Inmediato",
+      prioridad: "media",
+    },
+    {
+      id: 7,
+      nombre: "Protocolo de Anemia",
+      categoria: "Hematología",
+      descripcion: "Sulfato ferroso 300mg cada 12 horas con vitamina C",
+      tipo: "Medicamento",
+      frecuencia: "Cada 12 horas",
+      duracion: "60 días",
+      prioridad: "alta",
+    },
+    {
+      id: 8,
+      nombre: "Protocolo de Gastroenteritis",
+      categoria: "Gastroenterología",
+      descripcion:
+        "Hidratación oral + loperamida 2mg después de cada deposición",
+      tipo: "Medicamento",
+      frecuencia: "Según necesidad",
+      duracion: "5 días",
+      prioridad: "media",
+    },
+  ];
+
   // Estados para funcionalidades
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingOrden, setEditingOrden] = useState<any>(null);
@@ -110,9 +196,36 @@ export function OrdenesMedicas() {
     setOrdenesFiltradas(filtradas);
   };
 
+  // Función para filtrar protocolos (para el dropdown de búsqueda)
+  const filtrarProtocolos = () => {
+    return protocolos.filter(
+      (protocolo) =>
+        protocolo.nombre.toLowerCase().includes(filtros.search.toLowerCase()) ||
+        protocolo.categoria.toLowerCase().includes(filtros.search.toLowerCase())
+    );
+  };
+
   // Función para imprimir órdenes
   const handleImprimirOrdenes = () => {
     window.print();
+  };
+
+  // Función para seleccionar protocolo
+  const handleSeleccionarProtocolo = (protocolo: any) => {
+    const nuevaOrden = {
+      id: Date.now(),
+      tipo: protocolo.tipo,
+      descripcion: protocolo.nombre,
+      frecuencia: protocolo.frecuencia,
+      duracion: protocolo.duracion,
+      estado: "activa",
+      prioridad: protocolo.prioridad,
+      fecha: new Date().toISOString().split("T")[0],
+      medico: "Dr. Actual", // Esto debería venir del contexto del usuario actual
+    };
+
+    setOrdenes([...ordenes, nuevaOrden]);
+    setFiltros({ ...filtros, search: "" }); // Limpiar búsqueda después de seleccionar
   };
 
   const getEstadoColor = (estado: string) => {
@@ -154,14 +267,54 @@ export function OrdenesMedicas() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button onClick={handleAgregarOrden}>
-            <Plus className="h-4 w-4 mr-2" />
-            Nueva Orden
-          </Button>
-          <Button variant="outline" onClick={handleImprimirOrdenes}>
-            <FileText className="h-4 w-4 mr-2" />
-            Imprimir Órdenes
-          </Button>
+          <div className="relative">
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <Input
+                  placeholder="Buscar protocolos médicos..."
+                  className="pl-10 w-80"
+                  value={filtros.search}
+                  onChange={(e) =>
+                    setFiltros({ ...filtros, search: e.target.value })
+                  }
+                />
+              </div>
+              <Button onClick={handleFiltrar}>Agregar Protocolos</Button>
+            </div>
+
+            {/* Dropdown de resultados de búsqueda */}
+            {filtros.search && (
+              <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-md shadow-lg z-50 max-h-64 overflow-y-auto">
+                <div className="p-2">
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Protocolos disponibles:
+                  </p>
+                  {filtrarProtocolos()
+                    .slice(0, 5)
+                    .map((protocolo) => (
+                      <button
+                        key={protocolo.id}
+                        className="w-full text-left p-2 hover:bg-muted rounded-sm transition-colors"
+                        onClick={() => handleSeleccionarProtocolo(protocolo)}
+                      >
+                        <div className="font-medium">{protocolo.nombre}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {protocolo.categoria}
+                        </div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          {protocolo.descripcion}
+                        </div>
+                      </button>
+                    ))}
+                  {filtrarProtocolos().length === 0 && (
+                    <p className="text-sm text-muted-foreground p-2">
+                      No se encontraron protocolos
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

@@ -21,7 +21,11 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-export function NotasMedicas() {
+export function NotasMedicas({
+  setCurrentView,
+}: {
+  setCurrentView: (view: string) => void;
+}) {
   const [notas] = useState([
     {
       id: 1,
@@ -80,14 +84,14 @@ export function NotasMedicas() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button>
+          <Button onClick={() => setCurrentView("medical-record")}>
             <Plus className="h-4 w-4 mr-2" />
             Nueva Nota
           </Button>
-          <Button variant="outline">
+          {/* <Button variant="outline">
             <FileText className="h-4 w-4 mr-2" />
             Plantillas
-          </Button>
+          </Button> */}
         </div>
       </div>
 
@@ -158,83 +162,6 @@ export function NotasMedicas() {
         </Card>
       </div>
 
-      {/* Formulario para nueva nota */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Nueva Nota Médica</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">Título</label>
-              <input
-                type="text"
-                className="w-full p-2 border border-border rounded-md bg-background"
-                placeholder="Título de la nota"
-                value={nuevaNota.titulo}
-                onChange={(e) =>
-                  setNuevaNota({ ...nuevaNota, titulo: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                Tipo de Nota
-              </label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Seleccionar tipo" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="evolucion">Evolución</SelectItem>
-                  <SelectItem value="ingreso">Ingreso</SelectItem>
-                  <SelectItem value="alta">Alta médica</SelectItem>
-                  <SelectItem value="consulta">Consulta externa</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-2">
-              Especialidad
-            </label>
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Seleccionar especialidad" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="medicina-interna">
-                  Medicina Interna
-                </SelectItem>
-                <SelectItem value="cardiologia">Cardiología</SelectItem>
-                <SelectItem value="neurologia">Neurología</SelectItem>
-                <SelectItem value="cirugia">Cirugía</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-2">
-              Contenido de la Nota
-            </label>
-            <Textarea
-              placeholder="Escriba aquí el contenido de la nota médica..."
-              className="min-h-[150px]"
-              value={nuevaNota.contenido}
-              onChange={(e) =>
-                setNuevaNota({ ...nuevaNota, contenido: e.target.value })
-              }
-            />
-          </div>
-          <div className="flex gap-2">
-            <Button>
-              <Save className="h-4 w-4 mr-2" />
-              Guardar Nota
-            </Button>
-            <Button variant="outline">Guardar como Borrador</Button>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Lista de notas */}
       <Card>
         <CardHeader>
@@ -271,7 +198,11 @@ export function NotasMedicas() {
                     </div>
                   </div>
                   <div className="flex gap-1">
-                    <Button variant="ghost" size="icon">
+                    <Button
+                      onClick={() => setCurrentView("medical-record")}
+                      variant="ghost"
+                      size="icon"
+                    >
                       <Edit className="h-4 w-4" />
                     </Button>
                     <Button variant="ghost" size="icon">

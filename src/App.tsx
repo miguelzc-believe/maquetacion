@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { MedicalRecordView } from "./components/MedicalRecordView";
-import { ConsultationView } from "./components/ConsultationView";
 import { OrdenesMedicas } from "./components/OrdenesMedicas";
 import { AntecedentesMedicos } from "./components/AntecedentesMedicos";
 import { EstudiosMedicos } from "./components/EstudiosMedicos";
@@ -188,11 +187,15 @@ export default function App() {
           {currentView === "laboratorios" && <Laboratorios />}
           {currentView === "cirugias" && <CirugiasMedicas />}
           {currentView === "tratamientos" && <TratamientosMedicos />}
-          {currentView === "notas-medicas" && <NotasMedicas />}
-          {currentView === "notas-enfermeria" && <NotasEnfermeria />}
+          {currentView === "notas-medicas" && (
+            <NotasMedicas setCurrentView={setCurrentView} />
+          )}
+          {currentView === "notas-enfermeria" && (
+            <NotasEnfermeria setCurrentView={setCurrentView} />
+          )}
           {currentView === "epicrisis" && <EpicrisisMedica />}
           {currentView === "medical-record" && <MedicalRecordView />}
-          {currentView === "consultation" && <ConsultationView />}
+          {/* {currentView === "consultation" && <ConsultationView />} */}
         </main>
       </div>
     </div>
@@ -221,22 +224,18 @@ function NavigationMenu({
       items: [
         { name: "Estudios", view: "estudios", badge: "5" },
         { name: "Laboratorios", view: "laboratorios", badge: "8" },
-        { name: "Historial Médico", view: "medical-record", badge: null },
+        { name: "Medicamentos", view: "tratamientos", badge: "8" },
       ],
     },
     {
       id: "monitoreo",
       title: "Monitoreo",
-      items: [
-        { name: "Cirugías", view: "cirugias", badge: "2" },
-        { name: "Consulta Actual", view: "consultation", badge: null },
-      ],
+      items: [{ name: "Cirugías", view: "cirugias", badge: "2" }],
     },
     {
       id: "tratamiento",
       title: "Tratamiento",
       items: [
-        { name: "Tratamientos", view: "tratamientos", badge: "8" },
         { name: "Notas médicas", view: "notas-medicas", badge: "15" },
         { name: "Notas de enfermería", view: "notas-enfermeria", badge: "7" },
         { name: "Epicrisis", view: "epicrisis", badge: "1" },

@@ -21,7 +21,11 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-export function NotasEnfermeria() {
+export function NotasEnfermeria({
+  setCurrentView,
+}: {
+  setCurrentView: (view: string) => void;
+}) {
   const [notas] = useState([
     {
       id: 1,
@@ -69,7 +73,7 @@ export function NotasEnfermeria() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button>
+          <Button onClick={() => setCurrentView("medical-record")}>
             <Plus className="h-4 w-4 mr-2" />
             Nueva Nota
           </Button>

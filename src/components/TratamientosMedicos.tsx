@@ -18,6 +18,7 @@ import {
   Pill,
   Activity,
   Calendar,
+  RefreshCw,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -119,6 +120,10 @@ export function TratamientosMedicos() {
           </p>
         </div>
         <div className="flex gap-2">
+          <Button onClick={() => {}} variant="outline">
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Actualizar
+          </Button>
           <Button onClick={handleNuevoTratamiento}>
             <Plus className="h-4 w-4 mr-2" />
             Nuevo Tratamiento

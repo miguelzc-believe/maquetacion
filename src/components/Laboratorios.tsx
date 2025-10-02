@@ -261,6 +261,100 @@ export function Laboratorios() {
           </Button>
         </div>
       </div>
+      {/* Estadísticas rápidas */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card className="medical-info-box">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-success/10 rounded-lg">
+                <FileText className="h-5 w-5 text-success" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Completados</p>
+                <p className="text-2xl font-bold text-success">
+                  {resultados.categorias.reduce(
+                    (acc, cat) =>
+                      acc +
+                      cat.estudios.filter((e) =>
+                        e.resultados.some(
+                          (r) => r !== "Sin datos" && r !== "N/A"
+                        )
+                      ).length,
+                    0
+                  )}
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="medical-info-box">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-warning/10 rounded-lg">
+                <Calendar className="h-5 w-5 text-warning" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Pendientes</p>
+                <p className="text-2xl font-bold text-warning">
+                  {resultados.categorias.reduce(
+                    (acc, cat) =>
+                      acc +
+                      cat.estudios.filter((e) =>
+                        e.resultados.some((r) => r === "Sin datos")
+                      ).length,
+                    0
+                  )}
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="medical-info-box">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-primary/10 rounded-lg">
+                <Plus className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Este Mes</p>
+                <p className="text-2xl font-bold text-primary">
+                  {resultados.categorias.reduce(
+                    (acc, cat) =>
+                      acc +
+                      cat.estudios.filter((e) =>
+                        e.resultados.some(
+                          (r) => r !== "Sin datos" && r !== "N/A"
+                        )
+                      ).length,
+                    0
+                  )}
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="medical-info-box">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-secondary/10 rounded-lg">
+                <Download className="h-5 w-5 text-secondary" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Total Estudios</p>
+                <p className="text-2xl font-bold text-secondary">
+                  {resultados.categorias.reduce(
+                    (acc, cat) => acc + cat.estudios.length,
+                    0
+                  )}
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Controles de fecha y filtros */}
       <Card>
@@ -384,101 +478,6 @@ export function Laboratorios() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Estadísticas rápidas */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="medical-info-box">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-success/10 rounded-lg">
-                <FileText className="h-5 w-5 text-success" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Completados</p>
-                <p className="text-2xl font-bold text-success">
-                  {resultados.categorias.reduce(
-                    (acc, cat) =>
-                      acc +
-                      cat.estudios.filter((e) =>
-                        e.resultados.some(
-                          (r) => r !== "Sin datos" && r !== "N/A"
-                        )
-                      ).length,
-                    0
-                  )}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="medical-info-box">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-warning/10 rounded-lg">
-                <Calendar className="h-5 w-5 text-warning" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Pendientes</p>
-                <p className="text-2xl font-bold text-warning">
-                  {resultados.categorias.reduce(
-                    (acc, cat) =>
-                      acc +
-                      cat.estudios.filter((e) =>
-                        e.resultados.some((r) => r === "Sin datos")
-                      ).length,
-                    0
-                  )}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="medical-info-box">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-primary/10 rounded-lg">
-                <Plus className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Este Mes</p>
-                <p className="text-2xl font-bold text-primary">
-                  {resultados.categorias.reduce(
-                    (acc, cat) =>
-                      acc +
-                      cat.estudios.filter((e) =>
-                        e.resultados.some(
-                          (r) => r !== "Sin datos" && r !== "N/A"
-                        )
-                      ).length,
-                    0
-                  )}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="medical-info-box">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-secondary/10 rounded-lg">
-                <Download className="h-5 w-5 text-secondary" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Total Estudios</p>
-                <p className="text-2xl font-bold text-secondary">
-                  {resultados.categorias.reduce(
-                    (acc, cat) => acc + cat.estudios.length,
-                    0
-                  )}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
     </div>
   );
 }
