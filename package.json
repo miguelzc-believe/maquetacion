@@ -55,8 +55,8 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "start": "vite preview --port 3050",
-        "preview": "vite preview --port 3050",
+        "start": "npx vite preview --port 3100 --host",
+        "preview": "npx vite preview --port 3100",
         "dev:clean": "rm -rf node_modules/.vite && npm run dev"
     }
 }
