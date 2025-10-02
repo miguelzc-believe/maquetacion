@@ -1,93 +1,67 @@
+import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
 import {
-  Plus,
-  Edit,
-  Trash2,
-  Calendar,
-  User,
-  Heart,
-  Activity,
-} from "lucide-react";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+import { Label } from "./ui/label";
+import { Badge } from "./ui/badge";
+import { Separator } from "./ui/separator";
+import { Plus, Save, Edit, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 export function AntecedentesMedicos() {
-  const [antecedentes] = useState({
-    personales: [
-      {
-        id: 1,
-        tipo: "Patológico",
-        descripcion: "Diabetes Mellitus tipo 2",
-        fecha: "2018-03-15",
-        estado: "activo",
-        gravedad: "moderada",
-      },
-      {
-        id: 2,
-        tipo: "Quirúrgico",
-        descripcion: "Apendicectomía",
-        fecha: "2015-08-22",
-        estado: "resuelto",
-        gravedad: "leve",
-      },
-    ],
-    familiares: [
-      {
-        id: 1,
-        familiar: "Padre",
-        condicion: "Hipertensión Arterial",
-        edad_diagnostico: 55,
-        estado: "fallecido",
-      },
-      {
-        id: 2,
-        familiar: "Madre",
-        condicion: "Diabetes tipo 2",
-        edad_diagnostico: 60,
-        estado: "activo",
-      },
-    ],
-    alergias: [
-      {
-        id: 1,
-        alergeno: "Penicilina",
-        reaccion: "Erupción cutánea",
-        gravedad: "moderada",
-      },
-      {
-        id: 2,
-        alergeno: "Mariscos",
-        reaccion: "Anafilaxis",
-        gravedad: "severa",
-      },
-    ],
+  // Estados para los formularios
+  const [antecedentes, setAntecedentes] = useState({
+    familiares: "",
+    quirurgicos: "",
+    sociales: "",
+    alergias: "",
+    enfermedadesBase: "",
+    fuma: "no",
+    tipoSangre: "",
   });
 
-  // Estados para funcionalidades
-  const [activeTab, setActiveTab] = useState("personales");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState<any>(null);
+  const [isEditing, setIsEditing] = useState({
+    familiares: false,
+    quirurgicos: false,
+    sociales: false,
+    alergias: false,
+    enfermedadesBase: false,
+  });
 
-  // Función para agregar nuevo antecedente
-  const handleAgregarAntecedente = () => {
-    setEditingItem(null);
-    setIsModalOpen(true);
+  // Función para manejar cambios en inputs
+  const handleInputChange = (field: string, value: string) => {
+    setAntecedentes((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
 
-  // Función para editar antecedente
-  const handleEditarAntecedente = (item: any) => {
-    setEditingItem(item);
-    setIsModalOpen(true);
+  // Función para guardar campo
+  const handleGuardarCampo = (field: string) => {
+    setIsEditing((prev) => ({
+      ...prev,
+      [field]: false,
+    }));
+    alert(
+      `Guardando ${field}: ${antecedentes[field as keyof typeof antecedentes]}`
+    );
   };
 
-  // Función para eliminar antecedente
-  const handleEliminarAntecedente = (id: number, tipo: string) => {
-    if (confirm("¿Está seguro de eliminar este antecedente?")) {
-      // Aquí iría la lógica para eliminar el antecedente
-      console.log(`Eliminar antecedente ${id} de tipo ${tipo}`);
-    }
+  // Función para editar campo
+  const handleEditarCampo = (field: string) => {
+    setIsEditing((prev) => ({
+      ...prev,
+      [field]: true,
+    }));
   };
 
   return (
@@ -95,295 +69,323 @@ export function AntecedentesMedicos() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-foreground">
-            Antecedentes Médicos
-          </h2>
+          <h2 className="text-2xl font-bold text-foreground">Antecedentes</h2>
           <p className="text-muted-foreground">
-            Historial médico personal y familiar del paciente
+            Información médica del paciente
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button onClick={handleAgregarAntecedente}>
-            <Plus className="h-4 w-4 mr-2" />
-            Agregar Antecedente
-          </Button>
-        </div>
       </div>
 
-      {/* Resumen médico */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="medical-info-box">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-destructive/10 rounded-lg">
-                <Heart className="h-5 w-5 text-destructive" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Patologías</p>
-                <p className="text-2xl font-bold text-destructive">
-                  {
-                    antecedentes.personales.filter(
-                      (a) => a.tipo === "Patológico"
-                    ).length
-                  }
+      <div className="grid gap-6">
+        {/* Antecedentes familiares */}
+        <Card className="medical-card">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg text-foreground">
+                Antecedentes familiares (ICD / CIE)
+              </CardTitle>
+              {!isEditing.familiares ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleEditarCampo("familiares")}
+                >
+                  <Edit className="h-4 w-4 mr-2" />
+                  Editar
+                </Button>
+              ) : (
+                <Button
+                  size="sm"
+                  onClick={() => handleGuardarCampo("familiares")}
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  Guardar
+                </Button>
+              )}
+            </div>
+          </CardHeader>
+          <CardContent>
+            {!isEditing.familiares ? (
+              <div className="min-h-[40px] p-2 bg-muted/20 rounded border-2 border-dashed border-muted-foreground/25">
+                <p className="text-muted-foreground text-sm">
+                  {antecedentes.familiares || "Presione 'Enter' para guardar"}
                 </p>
               </div>
-            </div>
+            ) : (
+              <Textarea
+                placeholder="Ingrese antecedentes familiares..."
+                value={antecedentes.familiares}
+                onChange={(e) =>
+                  handleInputChange("familiares", e.target.value)
+                }
+                className="min-h-[80px]"
+              />
+            )}
           </CardContent>
         </Card>
 
-        <Card className="medical-info-box">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-warning/10 rounded-lg">
-                <User className="h-5 w-5 text-warning" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Familiares</p>
-                <p className="text-2xl font-bold text-warning">
-                  {antecedentes.familiares.length}
+        {/* Antecedentes quirúrgicos */}
+        <Card className="medical-card">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg text-foreground">
+                Antecedentes quirúrgicos
+              </CardTitle>
+              {!isEditing.quirurgicos ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleEditarCampo("quirurgicos")}
+                >
+                  <Edit className="h-4 w-4 mr-2" />
+                  Editar
+                </Button>
+              ) : (
+                <Button
+                  size="sm"
+                  onClick={() => handleGuardarCampo("quirurgicos")}
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  Guardar
+                </Button>
+              )}
+            </div>
+          </CardHeader>
+          <CardContent>
+            {!isEditing.quirurgicos ? (
+              <div className="min-h-[40px] p-2 bg-muted/20 rounded border-2 border-dashed border-muted-foreground/25">
+                <p className="text-muted-foreground text-sm">
+                  {antecedentes.quirurgicos || "Presione 'Enter' para guardar"}
                 </p>
               </div>
-            </div>
+            ) : (
+              <Textarea
+                placeholder="Ingrese antecedentes quirúrgicos..."
+                value={antecedentes.quirurgicos}
+                onChange={(e) =>
+                  handleInputChange("quirurgicos", e.target.value)
+                }
+                className="min-h-[80px]"
+              />
+            )}
           </CardContent>
         </Card>
 
-        <Card className="medical-info-box">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-secondary/10 rounded-lg">
-                <Activity className="h-5 w-5 text-secondary" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Alergias</p>
-                <p className="text-2xl font-bold text-secondary">
-                  {antecedentes.alergias.length}
+        {/* Antecedentes sociales */}
+        <Card className="medical-card">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg text-foreground">
+                Antecedentes sociales
+              </CardTitle>
+              {!isEditing.sociales ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleEditarCampo("sociales")}
+                >
+                  <Edit className="h-4 w-4 mr-2" />
+                  Editar
+                </Button>
+              ) : (
+                <Button
+                  size="sm"
+                  onClick={() => handleGuardarCampo("sociales")}
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  Guardar
+                </Button>
+              )}
+            </div>
+          </CardHeader>
+          <CardContent>
+            {!isEditing.sociales ? (
+              <div className="min-h-[40px] p-2 bg-muted/20 rounded border-2 border-dashed border-muted-foreground/25">
+                <p className="text-muted-foreground text-sm">
+                  {antecedentes.sociales || "Presione 'Enter' para guardar"}
                 </p>
               </div>
-            </div>
+            ) : (
+              <Textarea
+                placeholder="Ingrese antecedentes sociales..."
+                value={antecedentes.sociales}
+                onChange={(e) => handleInputChange("sociales", e.target.value)}
+                className="min-h-[80px]"
+              />
+            )}
           </CardContent>
         </Card>
-      </div>
-
-      {/* Tabs de antecedentes */}
-      <Tabs defaultValue="personales" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="personales">Personales</TabsTrigger>
-          <TabsTrigger value="familiares">Familiares</TabsTrigger>
-          <TabsTrigger value="alergias">Alergias</TabsTrigger>
-        </TabsList>
-
-        {/* Antecedentes Personales */}
-        <TabsContent value="personales" className="space-y-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Antecedentes Personales</CardTitle>
-              <Button size="sm" onClick={handleAgregarAntecedente}>
-                <Plus className="h-4 w-4 mr-1" />
-                Agregar
-              </Button>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {antecedentes.personales.map((antecedente) => (
-                  <div
-                    key={antecedente.id}
-                    className="flex items-center justify-between p-4 border border-border rounded-lg"
-                  >
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <Badge
-                          variant={
-                            antecedente.tipo === "Patológico"
-                              ? "destructive"
-                              : "secondary"
-                          }
-                        >
-                          {antecedente.tipo}
-                        </Badge>
-                        <Badge
-                          variant={
-                            antecedente.gravedad === "severa"
-                              ? "destructive"
-                              : "outline"
-                          }
-                        >
-                          {antecedente.gravedad}
-                        </Badge>
-                      </div>
-                      <p className="font-medium text-foreground">
-                        {antecedente.descripcion}
-                      </p>
-                      <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                        <span className="flex items-center gap-1">
-                          <Calendar className="h-4 w-4" />
-                          {antecedente.fecha}
-                        </span>
-                        <Badge
-                          variant={
-                            antecedente.estado === "activo"
-                              ? "default"
-                              : "outline"
-                          }
-                        >
-                          {antecedente.estado}
-                        </Badge>
-                      </div>
-                    </div>
-                    <div className="flex gap-1">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleEditarAntecedente(antecedente)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() =>
-                          handleEliminarAntecedente(
-                            antecedente.id,
-                            "personales"
-                          )
-                        }
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Antecedentes Familiares */}
-        <TabsContent value="familiares" className="space-y-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Antecedentes Familiares</CardTitle>
-              <Button size="sm" onClick={handleAgregarAntecedente}>
-                <Plus className="h-4 w-4 mr-1" />
-                Agregar
-              </Button>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {antecedentes.familiares.map((familiar) => (
-                  <div
-                    key={familiar.id}
-                    className="flex items-center justify-between p-4 border border-border rounded-lg"
-                  >
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <Badge>Familiar</Badge>
-                        <span className="font-medium text-primary">
-                          {familiar.familiar}
-                        </span>
-                      </div>
-                      <p className="font-medium text-foreground">
-                        {familiar.condicion}
-                      </p>
-                      <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                        <span>
-                          Edad diagnóstico: {familiar.edad_diagnostico} años
-                        </span>
-                        <Badge
-                          variant={
-                            familiar.estado === "activo" ? "default" : "outline"
-                          }
-                        >
-                          {familiar.estado}
-                        </Badge>
-                      </div>
-                    </div>
-                    <div className="flex gap-1">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleEditarAntecedente(familiar)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() =>
-                          handleEliminarAntecedente(familiar.id, "familiares")
-                        }
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
 
         {/* Alergias */}
-        <TabsContent value="alergias" className="space-y-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Alergias e Intolerancias</CardTitle>
-              <Button size="sm" onClick={handleAgregarAntecedente}>
-                <Plus className="h-4 w-4 mr-1" />
-                Agregar
-              </Button>
+        <Card className="medical-card">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg text-foreground">
+                Alergias (ICD / CIE)
+              </CardTitle>
+              {!isEditing.alergias ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleEditarCampo("alergias")}
+                >
+                  <Edit className="h-4 w-4 mr-2" />
+                  Editar
+                </Button>
+              ) : (
+                <Button
+                  size="sm"
+                  onClick={() => handleGuardarCampo("alergias")}
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  Guardar
+                </Button>
+              )}
+            </div>
+          </CardHeader>
+          <CardContent>
+            {!isEditing.alergias ? (
+              <div className="min-h-[40px] p-2 bg-muted/20 rounded border-2 border-dashed border-muted-foreground/25">
+                <p className="text-muted-foreground text-sm">
+                  {antecedentes.alergias || "Presione 'Enter' para guardar"}
+                </p>
+              </div>
+            ) : (
+              <Textarea
+                placeholder="Ingrese alergias..."
+                value={antecedentes.alergias}
+                onChange={(e) => handleInputChange("alergias", e.target.value)}
+                className="min-h-[80px]"
+              />
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Enfermedades de base / Antecedentes médicos */}
+        <Card className="medical-card">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg text-foreground">
+                Enfermedades de base / antecedentes médicos (ICD / CIE)
+              </CardTitle>
+              {!isEditing.enfermedadesBase ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleEditarCampo("enfermedadesBase")}
+                >
+                  <Edit className="h-4 w-4 mr-2" />
+                  Editar
+                </Button>
+              ) : (
+                <Button
+                  size="sm"
+                  onClick={() => handleGuardarCampo("enfermedadesBase")}
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  Guardar
+                </Button>
+              )}
+            </div>
+          </CardHeader>
+          <CardContent>
+            {!isEditing.enfermedadesBase ? (
+              <div className="min-h-[40px] p-2 bg-muted/20 rounded border-2 border-dashed border-muted-foreground/25">
+                <p className="text-muted-foreground text-sm">
+                  {antecedentes.enfermedadesBase ||
+                    "Presione 'Enter' para guardar"}
+                </p>
+              </div>
+            ) : (
+              <Textarea
+                placeholder="Ingrese enfermedades de base..."
+                value={antecedentes.enfermedadesBase}
+                onChange={(e) =>
+                  handleInputChange("enfermedadesBase", e.target.value)
+                }
+                className="min-h-[80px]"
+              />
+            )}
+          </CardContent>
+        </Card>
+
+        <Separator className="my-6" />
+
+        {/* Hábitos y características físicas */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* ¿El paciente fuma? */}
+          <Card className="medical-card">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg text-foreground">
+                ¿El paciente fuma?
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                {antecedentes.alergias.map((alergia) => (
-                  <div
-                    key={alergia.id}
-                    className="flex items-center justify-between p-4 border border-border rounded-lg"
-                  >
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <Badge
-                          variant={
-                            alergia.gravedad === "severa"
-                              ? "destructive"
-                              : "secondary"
-                          }
-                        >
-                          {alergia.gravedad}
-                        </Badge>
-                      </div>
-                      <p className="font-medium text-foreground">
-                        {alergia.alergeno}
-                      </p>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {alergia.reaccion}
-                      </p>
-                    </div>
-                    <div className="flex gap-1">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleEditarAntecedente(alergia)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() =>
-                          handleEliminarAntecedente(alergia.id, "alergias")
-                        }
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <RadioGroup
+                value={antecedentes.fuma}
+                onValueChange={(value: string) =>
+                  handleInputChange("fuma", value)
+                }
+                className="flex flex-row gap-6"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="no" id="no-fuma" />
+                  <Label htmlFor="no-fuma" className="text-foreground">
+                    No, fuma
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="si" id="si-fuma" />
+                  <Label htmlFor="si-fuma" className="text-foreground">
+                    Sí, fuma
+                  </Label>
+                </div>
+              </RadioGroup>
             </CardContent>
           </Card>
-        </TabsContent>
-      </Tabs>
+
+          {/* Tipo de sangre */}
+          <Card className="medical-card">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg text-foreground">
+                Tipo de sangre
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Select
+                value={antecedentes.tipoSangre}
+                onValueChange={(value: string) =>
+                  handleInputChange("tipoSangre", value)
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Seleccionar tipo de sangre" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="a+">A+</SelectItem>
+                  <SelectItem value="a-">A-</SelectItem>
+                  <SelectItem value="b+">B+</SelectItem>
+                  <SelectItem value="b-">B-</SelectItem>
+                  <SelectItem value="ab+">AB+</SelectItem>
+                  <SelectItem value="ab-">AB-</SelectItem>
+                  <SelectItem value="o+">O+</SelectItem>
+                  <SelectItem value="o-">O-</SelectItem>
+                </SelectContent>
+              </Select>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Información adicional */}
+        <Card className="medical-card">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between text-sm text-muted-foreground">
+              <span>Última actualización: 15/01/2025 10:30</span>
+              <span>Médico responsable: Dr. García López</span>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
