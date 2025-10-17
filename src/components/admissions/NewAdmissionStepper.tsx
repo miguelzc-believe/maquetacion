@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Card, CardContent } from "../ui/card";
+import { Textarea } from "../ui/textarea";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { type Patient } from "../../data/mockPatients";
 
@@ -27,7 +28,7 @@ interface FormValues {
   // Paso 1 - Paciente
   nombre: string;
   documento?: string;
-  edad: number | string;
+  fechaNacimiento: string;
   genero: "MASCULINO" | "FEMENINO" | "";
   tipoPaciente: "INSTITUCIONAL" | "PARTICULAR" | "";
   celular: string;
@@ -45,6 +46,7 @@ interface FormValues {
   // Paso 4 - Internación
   fechaIngreso: string;
   razonAdmision: string;
+  diagnosticoIngreso?: string;
   doctor: string;
   prioridad: "Nivel 1" | "Nivel 2" | "Nivel 3" | "";
   especialidad:
@@ -74,29 +76,30 @@ export function NewAdmissionStepper({
 }: NewAdmissionStepperProps) {
   const methods = useForm<FormValues>({
     defaultValues: {
-      nombre: "",
-      documento: "",
-      edad: "",
-      genero: "",
-      tipoPaciente: "",
-      celular: "",
-      contactoNombre: "",
-      contactoParentesco: "",
-      contactoCelular: "",
-      contactoEmail: "",
-      contactoDireccion: "",
-      alergias: "",
-      antecedentes: "",
-      mdrd: "",
+      nombre: "ADELA MANRIQUE TOLA",
+      documento: "78965412",
+      fechaNacimiento: "1972-05-14",
+      genero: "FEMENINO",
+      tipoPaciente: "INSTITUCIONAL",
+      celular: "70012345",
+      contactoNombre: "MARIA MANRIQUE",
+      contactoParentesco: "Hija",
+      contactoCelular: "70056789",
+      contactoEmail: "maria.manrique@example.com",
+      contactoDireccion: "Av. Siempre Viva 742",
+      alergias: "Penicilina, Ibuprofeno",
+      antecedentes: "HTA controlada, DM2",
+      mdrd: "60 ml/min/1.73m2",
       limitacionTerapeutica: "",
-      fechaIngreso: "",
-      razonAdmision: "",
-      doctor: "",
-      prioridad: "",
-      especialidad: "",
-      piso: "",
-      habitacion: "",
-      cama: "",
+      fechaIngreso: "23 de agosto de 2025 08:30",
+      razonAdmision: "Dolor abdominal agudo",
+      diagnosticoIngreso: "Apendicitis aguda",
+      doctor: "EVER LUIZAGA COCA",
+      prioridad: "Nivel 2",
+      especialidad: "Emergencia",
+      piso: "2",
+      habitacion: "204",
+      cama: "12",
     },
     mode: "onChange",
   });
@@ -109,7 +112,9 @@ export function NewAdmissionStepper({
     const v = methods.getValues();
     switch (steps[currentStep].key) {
       case "paciente":
-        return Boolean(v.nombre && v.edad && v.genero && v.tipoPaciente);
+        return Boolean(
+          v.nombre && v.fechaNacimiento && v.genero && v.tipoPaciente
+        );
       case "internacion":
         return Boolean(
           v.fechaIngreso &&
@@ -131,10 +136,18 @@ export function NewAdmissionStepper({
   const handlePrev = () => setCurrentStep((s) => Math.max(s - 1, 0));
 
   const handleFinish = methods.handleSubmit((values) => {
+    const calculateAge = (birthIso: string) => {
+      const today = new Date();
+      const dob = new Date(birthIso);
+      let age = today.getFullYear() - dob.getFullYear();
+      const m = today.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+      return age;
+    };
     const patient: Patient = {
       id: Date.now().toString(),
       nombre: values.nombre,
-      edad: Number(values.edad) || 0,
+      edad: calculateAge(values.fechaNacimiento),
       genero: (values.genero as "MASCULINO" | "FEMENINO") || "MASCULINO",
       celular: values.celular || "",
       tipoPaciente:
@@ -199,18 +212,22 @@ export function NewAdmissionStepper({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Input
                   placeholder="Nombre completo"
+                  defaultValue={methods.getValues("nombre")}
                   {...methods.register("nombre", { required: true })}
                 />
                 <Input
                   placeholder="Documento (opcional)"
+                  defaultValue={methods.getValues("documento")}
                   {...methods.register("documento")}
                 />
                 <Input
-                  placeholder="Edad"
-                  type="number"
-                  {...methods.register("edad", { required: true })}
+                  placeholder="Fecha de nacimiento"
+                  type="date"
+                  defaultValue={methods.getValues("fechaNacimiento")}
+                  {...methods.register("fechaNacimiento", { required: true })}
                 />
                 <Select
+                  value={methods.watch("genero")}
                   onValueChange={(v) => methods.setValue("genero", v as any)}
                 >
                   <SelectTrigger>
@@ -222,6 +239,7 @@ export function NewAdmissionStepper({
                   </SelectContent>
                 </Select>
                 <Select
+                  value={methods.watch("tipoPaciente")}
                   onValueChange={(v) =>
                     methods.setValue("tipoPaciente", v as any)
                   }
@@ -234,7 +252,11 @@ export function NewAdmissionStepper({
                     <SelectItem value="PARTICULAR">Particular</SelectItem>
                   </SelectContent>
                 </Select>
-                <Input placeholder="Celular" {...methods.register("celular")} />
+                <Input
+                  placeholder="Celular"
+                  defaultValue={methods.getValues("celular")}
+                  {...methods.register("celular")}
+                />
               </div>
             )}
 
@@ -242,24 +264,29 @@ export function NewAdmissionStepper({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Input
                   placeholder="Nombre de contacto"
+                  defaultValue={methods.getValues("contactoNombre")}
                   {...methods.register("contactoNombre")}
                 />
                 <Input
                   placeholder="Parentesco"
+                  defaultValue={methods.getValues("contactoParentesco")}
                   {...methods.register("contactoParentesco")}
                 />
                 <Input
                   placeholder="Celular de contacto"
+                  defaultValue={methods.getValues("contactoCelular")}
                   {...methods.register("contactoCelular")}
                 />
                 <Input
                   placeholder="Email"
                   type="email"
+                  defaultValue={methods.getValues("contactoEmail")}
                   {...methods.register("contactoEmail")}
                 />
                 <Input
                   placeholder="Dirección"
                   className="md:col-span-2"
+                  defaultValue={methods.getValues("contactoDireccion")}
                   {...methods.register("contactoDireccion")}
                 />
               </div>
@@ -269,16 +296,23 @@ export function NewAdmissionStepper({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Input
                   placeholder="Alergias (separadas por coma)"
+                  defaultValue={methods.getValues("alergias")}
                   {...methods.register("alergias")}
                 />
-                <Input placeholder="MDRD" {...methods.register("mdrd")} />
+                <Input
+                  placeholder="MDRD"
+                  defaultValue={methods.getValues("mdrd")}
+                  {...methods.register("mdrd")}
+                />
                 <Input
                   placeholder="Limitación terapéutica (opcional)"
+                  defaultValue={methods.getValues("limitacionTerapeutica")}
                   {...methods.register("limitacionTerapeutica")}
                 />
                 <Input
                   placeholder="Antecedentes relevantes"
                   className="md:col-span-2"
+                  defaultValue={methods.getValues("antecedentes")}
                   {...methods.register("antecedentes")}
                 />
               </div>
@@ -288,17 +322,29 @@ export function NewAdmissionStepper({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Input
                   placeholder="Fecha de ingreso (ej. 23 de agosto de 2025 08:30)"
+                  defaultValue={methods.getValues("fechaIngreso")}
                   {...methods.register("fechaIngreso", { required: true })}
                 />
                 <Input
                   placeholder="Razón de admisión"
+                  defaultValue={methods.getValues("razonAdmision")}
                   {...methods.register("razonAdmision", { required: true })}
                 />
+                <div className="md:col-span-2">
+                  <Textarea
+                    placeholder="Diagnóstico de ingreso"
+                    className="min-h-[88px]"
+                    defaultValue={methods.getValues("diagnosticoIngreso")}
+                    {...methods.register("diagnosticoIngreso")}
+                  />
+                </div>
                 <Input
                   placeholder="Doctor"
+                  defaultValue={methods.getValues("doctor")}
                   {...methods.register("doctor", { required: true })}
                 />
                 <Select
+                  value={methods.watch("prioridad")}
                   onValueChange={(v) => methods.setValue("prioridad", v as any)}
                 >
                   <SelectTrigger>
@@ -311,6 +357,7 @@ export function NewAdmissionStepper({
                   </SelectContent>
                 </Select>
                 <Select
+                  value={methods.watch("especialidad")}
                   onValueChange={(v) =>
                     methods.setValue("especialidad", v as any)
                   }
@@ -333,16 +380,19 @@ export function NewAdmissionStepper({
                 <Input
                   placeholder="Piso"
                   type="number"
+                  defaultValue={methods.getValues("piso")}
                   {...methods.register("piso", { required: true })}
                 />
                 <Input
                   placeholder="Habitación"
                   type="number"
+                  defaultValue={methods.getValues("habitacion")}
                   {...methods.register("habitacion", { required: true })}
                 />
                 <Input
                   placeholder="Cama"
                   type="number"
+                  defaultValue={methods.getValues("cama")}
                   {...methods.register("cama", { required: true })}
                 />
               </div>
