@@ -56,7 +56,12 @@ export default defineConfig({
   server: {
     port: 3100,
     open: true,
-    allowedHosts: ["*", "https://maquetacion-internacion.miguel-zapata.com"],
+    allowedHosts: [
+      "*",
+      "maquetacion-internacion.miguel-zapata.com",
+      "localhost",
+      "ultimate-training-copyright-casey.trycloudflare.com",
+    ],
     hmr: {
       overlay: true,
     },
@@ -66,6 +71,11 @@ export default defineConfig({
     },
   },
   preview: {
-    allowedHosts: ["*", "https://maquetacion-internacion.miguel-zapata.com"],
+    allowedHosts: [
+      "*",
+      "maquetacion-internacion.miguel-zapata.com",
+      "localhost",
+      "ultimate-training-copyright-casey.trycloudflare.com",
+    ],
   },
 });
