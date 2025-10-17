@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: "clinica-maquetacion",
+      name: "maquetacion-internacion",
       script: "npm run start",
       instances: 1,
       exec_mode: "fork",
@@ -9,7 +9,7 @@ module.exports = {
       autorestart: true,
       max_memory_restart: "512M",
       env: {
-        PORT: 3050,
+        PORT: 3100,
         NODE_ENV: "development",
       },
     },

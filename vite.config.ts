@@ -54,9 +54,9 @@ export default defineConfig({
     outDir: "build",
   },
   server: {
-    port: 3050,
+    port: 3100,
     open: true,
-    allowedHosts: ["*", "maquetacion-internacion.miguel-zapata.com"],
+    allowedHosts: ["*", "https://maquetacion-internacion.miguel-zapata.com"],
     hmr: {
       overlay: true,
     },
@@ -66,6 +66,6 @@ export default defineConfig({
     },
   },
   preview: {
-    allowedHosts: ["*", "maquetacion-internacion.miguel-zapata.com"],
+    allowedHosts: ["*", "https://maquetacion-internacion.miguel-zapata.com"],
   },
 });
