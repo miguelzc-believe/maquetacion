@@ -1,0 +1,281 @@
+export interface Patient {
+  id: string;
+  nombre: string;
+  edad: number;
+  genero: "MASCULINO" | "FEMENINO";
+  celular: string;
+  tipoPaciente: "INSTITUCIONAL" | "PARTICULAR";
+  fechaIngreso: string;
+  razonAdmision: string;
+  doctor: string;
+  prioridad: "Nivel 1" | "Nivel 2" | "Nivel 3";
+  ubicacion: {
+    cama: number;
+    piso: number;
+    habitacion: number;
+  };
+  especialidad:
+    | "Emergencia"
+    | "Cardiología"
+    | "Traumatología"
+    | "Gastroenterología"
+    | "Medicina Interna";
+  alergias: string[];
+  mdrd: string;
+  limitacionTerapeutica?: string;
+}
+
+export const mockPatients: Patient[] = [
+  {
+    id: "1",
+    nombre: "ADELA MANRIQUE TOLA",
+    edad: 47,
+    genero: "FEMENINO",
+    celular: "59172271842",
+    tipoPaciente: "INSTITUCIONAL",
+    fechaIngreso: "22 de agosto de 2025 14:34",
+    razonAdmision: "Apendicitis",
+    doctor: "EVER LUIZAGA COCA",
+    prioridad: "Nivel 1",
+    ubicacion: { cama: 5, piso: 1, habitacion: 1 },
+    especialidad: "Emergencia",
+    alergias: ["alergia al sol", "Valvulopatías cardíacas"],
+    mdrd: "0.00 mL/min/1.73m²",
+    limitacionTerapeutica: "No reanimación cardiopulmonar (NRCP / DNR)",
+  },
+  {
+    id: "2",
+    nombre: "CARLOS MENDIETA RODRIGUEZ",
+    edad: 65,
+    genero: "MASCULINO",
+    celular: "59172345678",
+    tipoPaciente: "PARTICULAR",
+    fechaIngreso: "23 de agosto de 2025 09:15",
+    razonAdmision: "Infarto agudo de miocardio",
+    doctor: "MARIA GONZALEZ LOPEZ",
+    prioridad: "Nivel 1",
+    ubicacion: { cama: 3, piso: 2, habitacion: 4 },
+    especialidad: "Cardiología",
+    alergias: ["Penicilina"],
+    mdrd: "45.2 mL/min/1.73m²",
+  },
+  {
+    id: "3",
+    nombre: "ANA PATRICIA VARGAS",
+    edad: 34,
+    genero: "FEMENINO",
+    celular: "59172456789",
+    tipoPaciente: "INSTITUCIONAL",
+    fechaIngreso: "23 de agosto de 2025 16:20",
+    razonAdmision: "Fractura de fémur",
+    doctor: "JOSE MARTINEZ SILVA",
+    prioridad: "Nivel 2",
+    ubicacion: { cama: 8, piso: 1, habitacion: 2 },
+    especialidad: "Traumatología",
+    alergias: [],
+    mdrd: "78.5 mL/min/1.73m²",
+  },
+  {
+    id: "4",
+    nombre: "ROBERTO SANTOS MAMANI",
+    edad: 58,
+    genero: "MASCULINO",
+    celular: "59172567890",
+    tipoPaciente: "PARTICULAR",
+    fechaIngreso: "24 de agosto de 2025 11:45",
+    razonAdmision: "Pancreatitis aguda",
+    doctor: "CAROLINA FERNANDEZ",
+    prioridad: "Nivel 1",
+    ubicacion: { cama: 2, piso: 3, habitacion: 1 },
+    especialidad: "Gastroenterología",
+    alergias: ["Contraste yodado"],
+    mdrd: "32.1 mL/min/1.73m²",
+  },
+  {
+    id: "5",
+    nombre: "ELENA QUISPE CONDORI",
+    edad: 72,
+    genero: "FEMENINO",
+    celular: "59172678901",
+    tipoPaciente: "INSTITUCIONAL",
+    fechaIngreso: "24 de agosto de 2025 08:30",
+    razonAdmision: "Neumonía bilateral",
+    doctor: "PEDRO RAMIREZ TORRES",
+    prioridad: "Nivel 1",
+    ubicacion: { cama: 1, piso: 2, habitacion: 3 },
+    especialidad: "Medicina Interna",
+    alergias: ["Sulfonamidas"],
+    mdrd: "28.7 mL/min/1.73m²",
+  },
+  {
+    id: "6",
+    nombre: "MIGUEL ANGEL FLORES",
+    edad: 41,
+    genero: "MASCULINO",
+    celular: "59172789012",
+    tipoPaciente: "PARTICULAR",
+    fechaIngreso: "25 de agosto de 2025 13:15",
+    razonAdmision: "Colecistitis aguda",
+    doctor: "CAROLINA FERNANDEZ",
+    prioridad: "Nivel 2",
+    ubicacion: { cama: 6, piso: 3, habitacion: 2 },
+    especialidad: "Gastroenterología",
+    alergias: [],
+    mdrd: "65.3 mL/min/1.73m²",
+  },
+  {
+    id: "7",
+    nombre: "SILVIA RODRIGUEZ CASTRO",
+    edad: 29,
+    genero: "FEMENINO",
+    celular: "59172890123",
+    tipoPaciente: "INSTITUCIONAL",
+    fechaIngreso: "25 de agosto de 2025 19:45",
+    razonAdmision: "Accidente de tránsito - politraumatismo",
+    doctor: "JOSE MARTINEZ SILVA",
+    prioridad: "Nivel 1",
+    ubicacion: { cama: 4, piso: 1, habitacion: 3 },
+    especialidad: "Traumatología",
+    alergias: ["Morfina"],
+    mdrd: "89.2 mL/min/1.73m²",
+  },
+  {
+    id: "8",
+    nombre: "ANTONIO GUTIERREZ MAMANI",
+    edad: 67,
+    genero: "MASCULINO",
+    celular: "59172901234",
+    tipoPaciente: "PARTICULAR",
+    fechaIngreso: "26 de agosto de 2025 07:20",
+    razonAdmision: "Insuficiencia cardíaca congestiva",
+    doctor: "MARIA GONZALEZ LOPEZ",
+    prioridad: "Nivel 1",
+    ubicacion: { cama: 7, piso: 2, habitacion: 5 },
+    especialidad: "Cardiología",
+    alergias: ["IECA"],
+    mdrd: "38.9 mL/min/1.73m²",
+  },
+  {
+    id: "9",
+    nombre: "CARMEN LOPEZ VARGAS",
+    edad: 55,
+    genero: "FEMENINO",
+    celular: "59173012345",
+    tipoPaciente: "INSTITUCIONAL",
+    fechaIngreso: "26 de agosto de 2025 14:10",
+    razonAdmision: "Diabetes descompensada",
+    doctor: "PEDRO RAMIREZ TORRES",
+    prioridad: "Nivel 2",
+    ubicacion: { cama: 9, piso: 3, habitacion: 4 },
+    especialidad: "Medicina Interna",
+    alergias: ["Insulina humana"],
+    mdrd: "42.6 mL/min/1.73m²",
+  },
+  {
+    id: "10",
+    nombre: "FERNANDO TORRES QUISPE",
+    edad: 38,
+    genero: "MASCULINO",
+    celular: "59173123456",
+    tipoPaciente: "PARTICULAR",
+    fechaIngreso: "27 de agosto de 2025 10:30",
+    razonAdmision: "Hemorragia digestiva alta",
+    doctor: "CAROLINA FERNANDEZ",
+    prioridad: "Nivel 1",
+    ubicacion: { cama: 10, piso: 3, habitacion: 1 },
+    especialidad: "Gastroenterología",
+    alergias: [],
+    mdrd: "71.8 mL/min/1.73m²",
+  },
+  {
+    id: "11",
+    nombre: "GLORIA MAMANI CONDORI",
+    edad: 63,
+    genero: "FEMENINO",
+    celular: "59173234567",
+    tipoPaciente: "INSTITUCIONAL",
+    fechaIngreso: "27 de agosto de 2025 16:45",
+    razonAdmision: "Accidente cerebrovascular",
+    doctor: "EVER LUIZAGA COCA",
+    prioridad: "Nivel 1",
+    ubicacion: { cama: 11, piso: 2, habitacion: 6 },
+    especialidad: "Emergencia",
+    alergias: ["Aspirina"],
+    mdrd: "51.3 mL/min/1.73m²",
+  },
+  {
+    id: "12",
+    nombre: "HECTOR VARGAS FLORES",
+    edad: 46,
+    genero: "MASCULINO",
+    celular: "59173345678",
+    tipoPaciente: "PARTICULAR",
+    fechaIngreso: "28 de agosto de 2025 12:15",
+    razonAdmision: "Fractura de tibia y peroné",
+    doctor: "JOSE MARTINEZ SILVA",
+    prioridad: "Nivel 2",
+    ubicacion: { cama: 12, piso: 1, habitacion: 4 },
+    especialidad: "Traumatología",
+    alergias: [],
+    mdrd: "76.4 mL/min/1.73m²",
+  },
+  {
+    id: "13",
+    nombre: "IRENE CASTRO RODRIGUEZ",
+    edad: 59,
+    genero: "FEMENINO",
+    celular: "59173456789",
+    tipoPaciente: "INSTITUCIONAL",
+    fechaIngreso: "28 de agosto de 2025 09:00",
+    razonAdmision: "Hipertensión arterial severa",
+    doctor: "PEDRO RAMIREZ TORRES",
+    prioridad: "Nivel 1",
+    ubicacion: { cama: 13, piso: 3, habitacion: 3 },
+    especialidad: "Medicina Interna",
+    alergias: ["Betabloqueadores"],
+    mdrd: "44.7 mL/min/1.73m²",
+  },
+  {
+    id: "14",
+    nombre: "JORGE SILVA MAMANI",
+    edad: 52,
+    genero: "MASCULINO",
+    celular: "59173567890",
+    tipoPaciente: "PARTICULAR",
+    fechaIngreso: "29 de agosto de 2025 15:30",
+    razonAdmision: "Arritmia cardíaca",
+    doctor: "MARIA GONZALEZ LOPEZ",
+    prioridad: "Nivel 1",
+    ubicacion: { cama: 14, piso: 2, habitacion: 7 },
+    especialidad: "Cardiología",
+    alergias: ["Digoxina"],
+    mdrd: "58.9 mL/min/1.73m²",
+  },
+  {
+    id: "15",
+    nombre: "KARINA QUISPE TORRES",
+    edad: 31,
+    genero: "FEMENINO",
+    celular: "59173678901",
+    tipoPaciente: "INSTITUCIONAL",
+    fechaIngreso: "29 de agosto de 2025 20:15",
+    razonAdmision: "Apéndice perforado",
+    doctor: "EVER LUIZAGA COCA",
+    prioridad: "Nivel 1",
+    ubicacion: { cama: 15, piso: 1, habitacion: 5 },
+    especialidad: "Emergencia",
+    alergias: [],
+    mdrd: "82.1 mL/min/1.73m²",
+  },
+];
+
+export const getPatientById = (id: string): Patient | undefined => {
+  return mockPatients.find((patient) => patient.id === id);
+};
+
+export const getPatientsBySpecialty = (specialty: string): Patient[] => {
+  if (specialty === "Todos") {
+    return mockPatients;
+  }
+  return mockPatients.filter((patient) => patient.especialidad === specialty);
+};
