@@ -32,6 +32,7 @@ import {
   getPatientsBySpecialty,
   type Patient,
 } from "../data/mockPatients";
+import { useRouter } from "../contexts/RouterContext";
 
 interface InternacionesViewProps {
   onPatientSelect: (patient: Patient) => void;
@@ -42,10 +43,16 @@ export function InternacionesView({ onPatientSelect }: InternacionesViewProps) {
   const [selectedSpecialty, setSelectedSpecialty] = useState("Todos");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const [openNewAdmission, setOpenNewAdmission] = useState(false);
+  const [localPatients, setLocalPatients] = useState<Patient[]>(mockPatients);
+  const { navigate } = useRouter();
 
   // Filtrar pacientes por especialidad y término de búsqueda
   const filteredPatients = useMemo(() => {
-    let patients = getPatientsBySpecialty(selectedSpecialty);
+    let patients =
+      selectedSpecialty === "Todos"
+        ? localPatients
+        : localPatients.filter((p) => p.especialidad === selectedSpecialty);
 
     if (searchTerm) {
       patients = patients.filter(
@@ -144,6 +151,7 @@ export function InternacionesView({ onPatientSelect }: InternacionesViewProps) {
             <Button
               variant="outline"
               className="bg-primary/10 text-primary border-primary/20 hover:bg-primary/20"
+              onClick={() => navigate("/ingresos/nuevo")}
             >
               <UserPlus className="h-4 w-4 mr-2" />
               Paciente Nuevo
@@ -351,6 +359,8 @@ export function InternacionesView({ onPatientSelect }: InternacionesViewProps) {
           )}
         </CardContent>
       </Card>
+
+      {/* Stepper eliminado: ahora es una página dedicada */}
     </div>
   );
 }

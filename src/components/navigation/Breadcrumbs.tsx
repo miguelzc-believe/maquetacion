@@ -23,6 +23,13 @@ export function Breadcrumbs() {
           path: "/agenda-quirofano",
         });
         break;
+      case "/ingresos/nuevo":
+        crumbs.push({ label: "Internaciones", path: "/" });
+        crumbs.push({
+          label: "Registrar nuevo ingreso",
+          path: "/ingresos/nuevo",
+        });
+        break;
       case "/paciente":
         crumbs.push({ label: "Internaciones", path: "/" });
         if (currentRoute.params?.nombre) {

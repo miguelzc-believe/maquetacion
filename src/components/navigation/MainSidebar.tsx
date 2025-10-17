@@ -29,6 +29,12 @@ export function MainSidebar() {
       badge: "3",
     },
     {
+      id: "nuevo-ingreso",
+      label: "Registrar nuevo ingreso",
+      icon: <FileText className="h-5 w-5" />,
+      path: "/ingresos/nuevo",
+    },
+    {
       id: "agenda-cirugia",
       label: "Agenda de cirugía",
       icon: <Calendar className="h-5 w-5" />,

@@ -6,6 +6,7 @@ import { SolicitudesPage } from "./pages/SolicitudesPage";
 import { AgendaCirugiaPage } from "./pages/AgendaCirugiaPage";
 import { AgendaQuirofanoPage } from "./pages/AgendaQuirofanoPage";
 import { PatientDetailPage } from "./pages/PatientDetailPage";
+import NewAdmissionPage from "./pages/NewAdmissionPage";
 
 function AppRoutes() {
   const { currentRoute } = useRouter();
@@ -20,6 +21,8 @@ function AppRoutes() {
         return <AgendaCirugiaPage />;
       case "/agenda-quirofano":
         return <AgendaQuirofanoPage />;
+      case "/ingresos/nuevo":
+        return <NewAdmissionPage />;
       case "/paciente":
         return <PatientDetailPage />;
       default:
